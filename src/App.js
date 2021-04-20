@@ -24,7 +24,7 @@ function App() {
                                     u should export the component inside withRouter HOC component
                                  */
                             }
-                            <Route path="/orders" component={Orders} />
+                            <Route path="/orders" component={Orders}/>
                             <Route path="/" exact render={()=><Suspense fallback={<Spinner/>}><BurgerBuilder/></Suspense>}/>
                             <Route path="/checkout"  render={()=><Suspense fallback={<Spinner/>}><Checkout/></Suspense>}/>
                         </Switch>
