@@ -1,37 +1,63 @@
 
-import React,{Suspense} from "react"
+import React, { Component } from 'react';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import Layout from './hoc/Layout/Layout';
-import {BrowserRouter as Router,Route,Switch} from "react-router-dom";
-import Spinner from './components/UI/Spinner/Spinner'
-import Orders from "./containers/Orders/Orders";
-/*import Checkout from "./containers/Checkout/Checkout";
-import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";*/
-const Checkout=React.lazy(()=>import('./containers/Checkout/Checkout'));
-const BurgerBuilder=React.lazy(()=>import("./containers/BurgerBuilder/BurgerBuilder"));
+import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import Checkout from './containers/Checkout/Checkout';
+import Orders from './containers/Orders/Orders';
+import Auth from './containers/Auth/Auth';
+import Logout from './containers/Auth/Logout/Logout';
+import * as actions from './store/actions/index';
 
+class App extends Component {
+    componentDidMount () {
+        this.props.onTryAutoSignup();
+    }
 
-function App() {
-    return (
-            <Router >
+    render () {
+        let routes = (
+            <Switch>
+                <Route path="/auth" component={Auth} />
+                <Route path="/" exact component={BurgerBuilder} />
+                <Redirect to="/" />
+            </Switch>
+        );
+
+        if ( this.props.isAuthenticated ) {
+            routes = (
+                <Switch>
+                    <Route path="/checkout" component={Checkout} />
+                    <Route path="/orders" component={Orders} />
+                    <Route path="/logout" component={Logout} />
+                    <Route path="/" exact component={BurgerBuilder} />
+                    <Redirect to="/" />
+                </Switch>
+            );
+        }
+
+        return (
+            <div>
                 <Layout>
-                        <Switch>
-                            {
-                                /*<Route path="/" exact component={BurgerBuilder}/>
-                                  <Route path="/orders" component={Orders} />
-                                  <Route path="/checkout" exact component={Checkout}/>*/
-                                /*  with this methode u can get the history
-                                    object inside the component but with Suspense component
-                                    u should export the component inside withRouter HOC component
-                                 */
-                            }
-                            <Route path="/orders" component={Orders} />
-                            <Route path="/" exact render={()=><Suspense fallback={<Spinner/>}><BurgerBuilder/></Suspense>}/>
-                            <Route path="/checkout"  render={()=><Suspense fallback={<Spinner/>}><Checkout/></Suspense>}/>
-                        </Switch>
+                    {routes}
                 </Layout>
-            </Router>
-
-    );
+            </div>
+        );
+    }
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.token !== null
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onTryAutoSignup: () => dispatch( actions.authCheckState() )
+    };
+};
+
+export default withRouter( connect( mapStateToProps, mapDispatchToProps )( App ) );
+

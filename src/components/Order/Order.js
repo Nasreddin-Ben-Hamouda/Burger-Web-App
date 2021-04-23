@@ -27,7 +27,7 @@ const order = ( props ) => {
     });
 
     return (
-        <div className={classes.Order}>
+        <div className={classes.Order} onClick={props.delete} >
             <p>Ingredients: {ingredientOutput}</p>
             <p>Price: <strong>USD {Number.parseFloat( props.price ).toFixed( 2 )}</strong></p>
         </div>
