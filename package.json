@@ -78,8 +78,8 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "build": " node scripts/build.js",
+    "test": " node scripts/test.js"
   },
   "eslintConfig": {
     "extends": [
@@ -155,5 +155,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-disable": "^2.0.1"
   }
 }
