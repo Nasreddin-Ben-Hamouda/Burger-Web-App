@@ -1,4 +1,4 @@
 {
   "plugins": ["disable"],
-  "processor": "disable/disable"
+  "processor": "disable/disable "
 }
