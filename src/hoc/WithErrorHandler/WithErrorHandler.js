@@ -15,7 +15,7 @@ const withErrorHandler=(WrappedComponent,axios)=>{
             });
             this.resInterceptor=axios.interceptors.response.use(res=>res,err=>{
                 console.log(err.message)
-                if(err.message==="Network Error" || (err.response && (err.response.status===500 || err.response.status===404))){
+                if(err.message==="Network Error" || (err.response && (err.response.status===500 || err.response.status===404 || err.response.status===400))){
                     err={
                         message:"server is down"
                     }
